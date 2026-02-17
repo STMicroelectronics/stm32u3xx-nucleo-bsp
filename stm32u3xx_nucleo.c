@@ -72,12 +72,24 @@ USART_TypeDef *COM_USART[COMn]   = {COM1_UART};
   */
 static GPIO_TypeDef *LED_PORT[LEDn] =
 {
-  LED2_GPIO_PORT
+#if defined (USE_NUCLEO_144)
+  LED1_GPIO_PORT,
+#endif /* defined (USE_NUCLEO_144) */
+  LED2_GPIO_PORT,
+#if defined (USE_NUCLEO_144)
+  LED3_GPIO_PORT
+#endif /* defined (USE_NUCLEO_144) */
 };
 
 static const uint16_t LED_PIN[LEDn] =
 {
-  LED2_PIN
+#if defined (USE_NUCLEO_144)
+  LED1_PIN,
+#endif /* defined (USE_NUCLEO_144) */
+  LED2_PIN,
+#if defined (USE_NUCLEO_144)
+  LED3_PIN
+#endif /* defined (USE_NUCLEO_144) */
 };
 
 static GPIO_TypeDef *BUTTON_PORT[BUTTONn]   = {BUTTON_USER_GPIO_PORT};
@@ -161,7 +173,9 @@ const uint8_t *BSP_GetBoardID(void)
   * @brief  Configures LED GPIO.
   * @param  Led Specifies the Led to be configured.
   *   This parameter can be one of following parameters:
+  *     @arg  LD1
   *     @arg  LD2
+  *     @arg  LD3
   * @retval BSP status
   */
 int32_t BSP_LED_Init(Led_TypeDef Led)
@@ -169,23 +183,36 @@ int32_t BSP_LED_Init(Led_TypeDef Led)
   int32_t ret = BSP_ERROR_NONE;
   GPIO_InitTypeDef  gpio_init_structure;
 
-  if (Led != LD2)
+  /* Enable the GPIO LED Clock */
+  switch (Led)
   {
-    ret = BSP_ERROR_WRONG_PARAM;
-  }
-  else
-  {
-    /* Enable the GPIO LED Clock */
+  case LD2:
     LED2_GPIO_CLK_ENABLE();
+    break;
 
-    /* Configure the GPIO_LED pin */
-    gpio_init_structure.Pin   = LED_PIN[Led];
-    gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
-    gpio_init_structure.Pull  = GPIO_NOPULL;
-    gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+#if defined (USE_NUCLEO_144)
+  case LD1:
+    LED1_GPIO_CLK_ENABLE();
+    break;
 
-    HAL_GPIO_Init(LED_PORT[Led], &gpio_init_structure);
+  case LD3:
+    LED3_GPIO_CLK_ENABLE();
+    break;
+#endif
+
+  default:
+    /* Defensive: should not be reached due to check above */
+    ret = BSP_ERROR_WRONG_PARAM;
+    break;
   }
+
+  /* Configure the GPIO_LED pin */
+  gpio_init_structure.Pin   = LED_PIN[Led];
+  gpio_init_structure.Mode  = GPIO_MODE_OUTPUT_PP;
+  gpio_init_structure.Pull  = GPIO_NOPULL;
+  gpio_init_structure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+
+  HAL_GPIO_Init(LED_PORT[Led], &gpio_init_structure);
 
   return ret;
 }
@@ -194,7 +221,9 @@ int32_t BSP_LED_Init(Led_TypeDef Led)
   * @brief  DeInit LEDs.
   * @param  Led LED to be de-init.
   *   This parameter can be one of the following values:
+  *     @arg  LD1
   *     @arg  LD2
+  *     @arg  LD3
   * @note Led DeInit does not disable the GPIO clock nor disable the Mfx
   * @retval BSP status
   */
@@ -203,7 +232,11 @@ int32_t BSP_LED_DeInit(Led_TypeDef Led)
   int32_t ret = BSP_ERROR_NONE;
   GPIO_InitTypeDef  gpio_init_structure;
 
-  if ((Led != LD2))
+  if ((Led != LD2)
+#if defined (USE_NUCLEO_144)
+      && (Led != LD1) && (Led != LD3)
+#endif /* defined (USE_NUCLEO_144) */
+     )
   {
     ret = BSP_ERROR_WRONG_PARAM;
   }
@@ -223,14 +256,20 @@ int32_t BSP_LED_DeInit(Led_TypeDef Led)
   * @brief  Turns selected LED On.
   * @param  Led Specifies the Led to be set on.
   *   This parameter can be one of following parameters:
+  *     @arg  LD1
   *     @arg  LD2
+  *     @arg  LD3
   * @retval BSP status
   */
 int32_t BSP_LED_On(Led_TypeDef Led)
 {
   int32_t ret = BSP_ERROR_NONE;
 
-  if (Led != LD2)
+  if ((Led != LD2)
+#if defined (USE_NUCLEO_144)
+      && (Led != LD1) && (Led != LD3)
+#endif /* defined (USE_NUCLEO_144) */
+     )
   {
     ret = BSP_ERROR_WRONG_PARAM;
   }
@@ -246,14 +285,20 @@ int32_t BSP_LED_On(Led_TypeDef Led)
   * @brief  Turns selected LED Off.
   * @param  Led: Specifies the Led to be set off.
   *   This parameter can be one of following parameters:
+  *     @arg  LD1
   *     @arg  LD2
+  *     @arg  LD3
   * @retval BSP status
   */
 int32_t BSP_LED_Off(Led_TypeDef Led)
 {
   int32_t ret = BSP_ERROR_NONE;
 
-  if (Led != LD2)
+  if ((Led != LD2)
+#if defined (USE_NUCLEO_144)
+      && (Led != LD1) && (Led != LD3)
+#endif /* defined (USE_NUCLEO_144) */
+     )
   {
     ret = BSP_ERROR_WRONG_PARAM;
   }
@@ -269,14 +314,20 @@ int32_t BSP_LED_Off(Led_TypeDef Led)
   * @brief  Toggles the selected LED.
   * @param  Led Specifies the Led to be toggled.
   *   This parameter can be one of following parameters:
+  *     @arg  LD1
   *     @arg  LD2
+  *     @arg  LD3
   * @retval BSP status
   */
 int32_t BSP_LED_Toggle(Led_TypeDef Led)
 {
   int32_t ret = BSP_ERROR_NONE;
 
-  if (Led != LD2)
+  if ((Led != LD2)
+#if defined (USE_NUCLEO_144)
+      && (Led != LD1) && (Led != LD3)
+#endif /* defined (USE_NUCLEO_144) */
+     )
   {
     ret = BSP_ERROR_WRONG_PARAM;
   }
@@ -292,14 +343,20 @@ int32_t BSP_LED_Toggle(Led_TypeDef Led)
   * @brief  Get the state of the selected LED.
   * @param  Led LED to get its state
   *   This parameter can be one of following parameters:
+  *     @arg  LD1
   *     @arg  LD2
+  *     @arg  LD3
   * @retval LED status
   */
 int32_t BSP_LED_GetState(Led_TypeDef Led)
 {
   int32_t ret;
 
-  if (Led != LD2)
+  if ((Led != LD2)
+#if defined (USE_NUCLEO_144)
+      && (Led != LD1) && (Led != LD3)
+#endif /* defined (USE_NUCLEO_144) */
+     )
   {
     ret = BSP_ERROR_WRONG_PARAM;
   }
@@ -340,7 +397,7 @@ int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
   {
     /* Configure Button pin as input */
     gpio_init_structure.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(BUTTON_PORT [Button], &gpio_init_structure);
+    HAL_GPIO_Init(BUTTON_PORT[Button], &gpio_init_structure);
   }
   else /* (ButtonMode == BUTTON_MODE_EXTI) */
   {

@@ -54,20 +54,33 @@ extern "C" {
 #define USE_STM32U3XX_NUCLEO
 #endif /* !defined (USE_STM32U3XX_NUCLEO) */
 
-#if !defined (USE_NUCLEO_64)
-#error "Board Pin number not defined!! Add USE_NUCLEO_64 define within stm32u3xx_nucleo_conf.h file"
-#endif /* !defined (USE_NUCLEO_64) */
+#if !defined (USE_NUCLEO_64) && !defined (USE_NUCLEO_144)
+#error "Board Pin number not defined!! Add USE_NUCLEO_64 or USE_NUCLEO_144 define within stm32u3xx_nucleo_conf.h file"
+#endif /* !defined (USE_NUCLEO_64) && !defined (USE_NUCLEO_144) */
 
 /** @defgroup STM32U3XX_NUCLEO_LOW_LEVEL_Exported_Types LOW LEVEL Exported Types
   * @{
   */
 
+#if defined (USE_NUCLEO_144)
+typedef enum
+{
+  LD1 = 0U,
+  LED_GREEN = LD1,
+  LD2 = 1U,
+  LED_RED   = LD2,
+  LD3 = 2U,
+  LED_BLUE  = LD3,
+  LEDn
+} Led_TypeDef;
+#else
 typedef enum
 {
   LD2 = 0U,
   LED_GREEN = LD2,
   LEDn
 } Led_TypeDef;
+#endif/*USE_NUCLEO_144*/
 
 typedef enum
 {
@@ -147,27 +160,49 @@ typedef struct
   */
 
 /**
-  * @brief STM32U3XX NUCLEO BSP Driver version number V1.2.0
+  * @brief STM32U3XX NUCLEO BSP Driver version number V1.1.0
   */
-#define STM32U3XX_NUCLEO_BSP_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
-#define STM32U3XX_NUCLEO_BSP_VERSION_SUB1   (0x00U) /*!< [23:16] sub1 version */
-#define STM32U3XX_NUCLEO_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
-#define STM32U3XX_NUCLEO_BSP_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
+#define STM32U3XX_NUCLEO_BSP_VERSION_MAIN   (0x01UL) /*!< [31:24] main version */
+#define STM32U3XX_NUCLEO_BSP_VERSION_SUB1   (0x01UL) /*!< [23:16] sub1 version */
+#define STM32U3XX_NUCLEO_BSP_VERSION_SUB2   (0x00UL) /*!< [15:8]  sub2 version */
+#define STM32U3XX_NUCLEO_BSP_VERSION_RC     (0x00UL) /*!< [7:0]  release candidate */
 #define STM32U3XX_NUCLEO_BSP_VERSION        ((STM32U3XX_NUCLEO_BSP_VERSION_MAIN << 24)\
                                              |(STM32U3XX_NUCLEO_BSP_VERSION_SUB1 << 16)\
                                              |(STM32U3XX_NUCLEO_BSP_VERSION_SUB2 << 8 )\
                                              |(STM32U3XX_NUCLEO_BSP_VERSION_RC))
 
-#define STM32U3XX_NUCLEO_BSP_BOARD_NAME  "NUCLEO-U345RE-Q";
+#if defined (USE_NUCLEO_144)
+#define STM32U3XX_NUCLEO_BSP_BOARD_NAME  "NUCLEO-U3C5ZI-Q";
+#define STM32U3XX_NUCLEO_BSP_BOARD_ID    "MB2222B";
+#else
+#define STM32U3XX_NUCLEO_BSP_BOARD_NAME  "NUCLEO-U385RG-Q";
 #define STM32U3XX_NUCLEO_BSP_BOARD_ID    "MB1841A";
+#endif/*USE_NUCLEO_144*/
 
 /** @defgroup STM32U3XX_NUCLEO_LOW_LEVEL_LED LOW LEVEL LED
   * @{
   */
+#ifdef USE_NUCLEO_144
+#define LED1_PIN                                GPIO_PIN_5
+#define LED1_GPIO_PORT                          GPIOA
+#define LED1_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOA_CLK_ENABLE()
+#define LED1_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOA_CLK_DISABLE()
+
+#define LED2_PIN                                GPIO_PIN_14
+#define LED2_GPIO_PORT                          GPIOE
+#define LED2_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOE_CLK_ENABLE()
+#define LED2_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOE_CLK_DISABLE()
+
+#define LED3_PIN                                GPIO_PIN_8
+#define LED3_GPIO_PORT                          GPIOF
+#define LED3_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOF_CLK_ENABLE()
+#define LED3_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOF_CLK_DISABLE()
+#else
 #define LED2_PIN                                GPIO_PIN_5
 #define LED2_GPIO_PORT                          GPIOA
 #define LED2_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOA_CLK_ENABLE()
 #define LED2_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOA_CLK_DISABLE()
+#endif/*USE_NUCLEO_144*/
 /**
   * @}
   */
