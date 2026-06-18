@@ -1,6 +1,6 @@
 # BSP NUCLEO-STM32U3xx Component
 
-![tag](https://img.shields.io/badge/tag-v1.1.0-brightgreen.svg)
+![tag](https://img.shields.io/badge/tag-v1.2.0-brightgreen.svg)
 
 ## Overview
 

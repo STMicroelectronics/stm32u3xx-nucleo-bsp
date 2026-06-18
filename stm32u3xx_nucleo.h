@@ -160,10 +160,10 @@ typedef struct
   */
 
 /**
-  * @brief STM32U3XX NUCLEO BSP Driver version number V1.1.0
+  * @brief STM32U3XX NUCLEO BSP Driver version number V1.2.0
   */
 #define STM32U3XX_NUCLEO_BSP_VERSION_MAIN   (0x01UL) /*!< [31:24] main version */
-#define STM32U3XX_NUCLEO_BSP_VERSION_SUB1   (0x01UL) /*!< [23:16] sub1 version */
+#define STM32U3XX_NUCLEO_BSP_VERSION_SUB1   (0x02UL) /*!< [23:16] sub1 version */
 #define STM32U3XX_NUCLEO_BSP_VERSION_SUB2   (0x00UL) /*!< [15:8]  sub2 version */
 #define STM32U3XX_NUCLEO_BSP_VERSION_RC     (0x00UL) /*!< [7:0]  release candidate */
 #define STM32U3XX_NUCLEO_BSP_VERSION        ((STM32U3XX_NUCLEO_BSP_VERSION_MAIN << 24)\
@@ -175,7 +175,7 @@ typedef struct
 #define STM32U3XX_NUCLEO_BSP_BOARD_NAME  "NUCLEO-U3C5ZI-Q";
 #define STM32U3XX_NUCLEO_BSP_BOARD_ID    "MB2222B";
 #else
-#define STM32U3XX_NUCLEO_BSP_BOARD_NAME  "NUCLEO-U385RG-Q";
+#define STM32U3XX_NUCLEO_BSP_BOARD_NAME  "NUCLEO-U345RC-Q";
 #define STM32U3XX_NUCLEO_BSP_BOARD_ID    "MB1841A";
 #endif/*USE_NUCLEO_144*/
 

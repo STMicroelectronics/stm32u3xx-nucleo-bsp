@@ -186,24 +186,24 @@ int32_t BSP_LED_Init(Led_TypeDef Led)
   /* Enable the GPIO LED Clock */
   switch (Led)
   {
-  case LD2:
-    LED2_GPIO_CLK_ENABLE();
-    break;
+    case LD2:
+      LED2_GPIO_CLK_ENABLE();
+      break;
 
 #if defined (USE_NUCLEO_144)
-  case LD1:
-    LED1_GPIO_CLK_ENABLE();
-    break;
+    case LD1:
+      LED1_GPIO_CLK_ENABLE();
+      break;
 
-  case LD3:
-    LED3_GPIO_CLK_ENABLE();
-    break;
-#endif
+    case LD3:
+      LED3_GPIO_CLK_ENABLE();
+      break;
+#endif /* USE_NUCLEO_144 */
 
-  default:
-    /* Defensive: should not be reached due to check above */
-    ret = BSP_ERROR_WRONG_PARAM;
-    break;
+    default:
+      /* Defensive: should not be reached due to check above */
+      ret = BSP_ERROR_WRONG_PARAM;
+      break;
   }
 
   /* Configure the GPIO_LED pin */
